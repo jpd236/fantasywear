@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fantasy_content>
+    <league>
+        <scoreboard>
+            <matchups count="2">
+                <matchup>
+                    <teams count="2">
+                        <team>
+                            <name>Opponent</name>
+                            <team_logos>
+                                <team_logo>
+                                    <url>http://opplogo</url>
+                                </team_logo>
+                            </team_logos>
+                            <team_points>
+                                <total>50.00</total>
+                            </team_points>
+                        </team>
+                        <team>
+                            <name>Me</name>
+                            <is_owned_by_current_login>1</is_owned_by_current_login>
+                            <team_logos>
+                                <team_logo>
+                                    <url>http://logo</url>
+                                </team_logo>
+                            </team_logos>
+                            <team_points>
+                                <total>100.00</total>
+                            </team_points>
+                        </team>
+                    </teams>
+                </matchup>
+                <matchup>
+                    <teams count="2">
+                        <team>
+                            <name>Person 3</name>
+                            <team_logos>
+                                <team_logo>
+                                    <url>http://logo</url>
+                                </team_logo>
+                            </team_logos>
+                            <team_points>
+                                <total>50.00</total>
+                            </team_points>
+                        </team>
+                        <team>
+                            <name>Person 4</name>
+                            <team_logos>
+                                <team_logo>
+                                    <url>http://logo</url>
+                                </team_logo>
+                            </team_logos>
+                            <team_points>
+                                <total>50.00</total>
+                            </team_points>
+                        </team>
+                    </teams>
+                </matchup>
+            </matchups>
+        </scoreboard>
+    </league>
+</fantasy_content>

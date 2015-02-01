@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        The length/width of the logo as displayed on the wear device.
+        This is shared in common/ because as a small optimization, we pre-scale the logo bitmaps on
+        the host device before transmitting them to the wear device. We use px rather than dp
+        because current Android Wear guidelines suggest background dimensions in px units.
+    -->
+    <dimen name="logo_size">60px</dimen>
+</resources>

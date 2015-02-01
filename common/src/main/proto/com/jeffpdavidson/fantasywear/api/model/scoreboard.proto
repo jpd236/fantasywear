@@ -1,0 +1,24 @@
+package com.jeffpdavidson.fantasywear.api.model;
+
+option java_package = "com.jeffpdavidson.fantasywear.api.model";
+option java_multiple_files = true;
+
+message Team {
+    // The name of the team, as displayed to the user.
+    optional string name = 1;
+
+    // Whether this team is owned by the user.
+    optional bool is_owned_by_current_login = 2;
+
+    // URL for the team's logo image.
+    optional string logo_url = 3;
+
+    // The user's current score.
+    optional string score = 4;
+}
+
+message Matchup {
+    optional Team my_team = 1;
+
+    optional Team opponent_team = 2;
+}

@@ -1,0 +1,27 @@
+package com.jeffpdavidson.fantasywear.api.auth;
+
+option java_package = "com.jeffpdavidson.fantasywear.api.auth";
+
+message Token {
+    // The token. May be an access token or request token.
+    optional string token = 1;
+
+    // The secret associated with the token.
+    optional string token_secret = 2;
+
+    // A persistent credential that can be used to refresh expired access tokens.
+    optional string session_handle = 3;
+
+    // Epoch time when the token will expire, in seconds.
+    optional uint64 expiration_time_sec = 4;
+
+    // Epoch time when the user's authorization will expire, in seconds. After this point the
+    // session handle may no longer be used to refresh tokens.
+    optional uint64 authorization_expiration_time_sec = 5;
+
+    // For request tokens, the URL of the page where authorization can be obtained.
+    optional string request_auth_url = 6;
+
+    // The introspective GUID of the user.
+    optional string yahoo_guid = 7;
+}

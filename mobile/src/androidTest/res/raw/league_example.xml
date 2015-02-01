@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fantasy_content>
+    <users count="1">
+        <user>
+            <games count="1">
+                <game>
+                    <leagues count="2">
+                        <league>
+                            <league_key>key1</league_key>
+                            <name>name1</name>
+                            <scoring_type>headpoint</scoring_type>
+                        </league>
+                        <league>
+                            <league_key>key2</league_key>
+                            <name>name2</name>
+                            <scoring_type>unknown</scoring_type>
+                        </league>
+                    </leagues>
+                </game>
+            </games>
+        </user>
+    </users>
+</fantasy_content>

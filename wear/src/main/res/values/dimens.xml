@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        Dimensions for the generated notification background image. We take the logos of the two
+        competing teams and circle-crop them atop a white background on a 400x400 bitmap for use
+        with WearableExtender#setBackground.
+
+        See: http://developer.android.com/training/wearables/notifications
+                /creating.html#AddWearableFeatures
+    -->
+    <!-- Width of the generated notification background image. -->
+    <dimen name="background_width">400px</dimen>
+    <!-- Height of the generated notification background image. -->
+    <dimen name="background_height">400px</dimen>
+    <!-- Horizontal padding for the team logos. -->
+    <dimen name="logo_padding_horizontal">120px</dimen>
+    <!-- Top padding for the team logos. -->
+    <dimen name="logo_padding_top">85px</dimen>
+</resources>

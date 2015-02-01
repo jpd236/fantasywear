@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FantasyWear</string>
+    <string name="score_title">%1$s \u2013 %2$s</string>
+    <string name="score_tied_with">tied with %s</string>
+    <string name="score_beating">beating %s</string>
+    <string name="score_losing_to">losing to %s</string>
+</resources>

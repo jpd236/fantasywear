@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ActionBar.Child" parent="Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="displayOptions">homeAsUp|showHome|showTitle</item>
+    </style>
+</resources>

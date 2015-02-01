@@ -1,0 +1,14 @@
+package com.jeffpdavidson.fantasywear.api.model;
+
+option java_package = "com.jeffpdavidson.fantasywear.api.model";
+
+message League {
+    // The identifier for the account belonging to the league.
+    optional string account_name = 1;
+
+    // The identifier of the league.
+    optional string league_key = 2;
+
+    // The name of the league, as displayed to the user.
+    optional string league_name = 3;
+}

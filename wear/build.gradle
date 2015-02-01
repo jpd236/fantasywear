@@ -1,0 +1,47 @@
+apply plugin: 'com.android.application'
+
+String keystoreProperty = 'com.jeffpdavidson.fantasywear.keystore'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
+
+    defaultConfig {
+        applicationId "com.jeffpdavidson.fantasywear"
+        minSdkVersion 20
+        targetSdkVersion 21
+        versionCode 1
+        versionName "1.0"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(property(keystoreProperty))
+            storePassword "jeffpdavidson"
+            keyAlias "fantasywear"
+            keyPassword "fantasywear"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles = [
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "$rootDir/proguard-rules.pro"
+            ]
+            signingConfig = signingConfigs.release
+        }
+    }
+}
+
+dependencies {
+    compile project(':common')
+
+    // For library dependencies, it is okay to pick up new bugfix releases.
+
+    //noinspection GradleDynamicVersion
+    compile 'com.google.android.support:wearable:1.0.+'
+    //noinspection GradleDynamicVersion
+    compile 'com.google.android.gms:play-services-wearable:6.5.+'
+}

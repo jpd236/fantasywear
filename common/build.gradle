@@ -1,0 +1,44 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
+
+    defaultConfig {
+        minSdkVersion 9
+        targetSdkVersion 21
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles = [
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "$rootDir/proguard-rules.pro",
+                "proguard-rules.pro"
+            ]
+        }
+    }
+    packagingOptions {
+        // Provided by both hamcrest-core and junit.
+        exclude 'LICENSE.txt'
+    }
+
+    // TODO: Automatically generate these Java files.
+    sourceSets.main.java.srcDir 'src/main/java-proto'
+}
+
+dependencies {
+    // For library dependencies, it is okay to pick up new bugfix releases.
+
+    //noinspection GradleDynamicVersion
+    compile 'com.squareup.wire:wire-runtime:1.6.+'
+    //noinspection GradleDynamicVersion
+    compile 'com.google.android.gms:play-services-wearable:6.5.+'
+
+    //noinspection GradleDynamicVersion
+    androidTestCompile 'com.android.support.test:testing-support-lib:0.+'
+    //noinspection GradleDynamicVersion
+    androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.+'
+}

@@ -1,0 +1,87 @@
+apply plugin: 'com.android.application'
+
+String consumerKeyProperty = 'com.jeffpdavidson.fantasywear.consumerKey'
+String consumerSecretProperty = 'com.jeffpdavidson.fantasywear.consumerSecret'
+String callbackUrlProperty = 'com.jeffpdavidson.fantasywear.callbackUrl'
+
+String keystoreProperty = 'com.jeffpdavidson.fantasywear.keystore'
+
+// Ensure we have OAuth secrets from gradle.properties.
+if (!hasProperty(consumerKeyProperty) || !hasProperty(consumerSecretProperty) ||
+        !hasProperty(callbackUrlProperty)) {
+    throw new InvalidUserDataException(
+            "Must set consumer key/secret and callback URL in gradle.properties");
+}
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
+
+    defaultConfig {
+        applicationId "com.jeffpdavidson.fantasywear"
+        // Prior to API 14, we are unable to reliably check the caller in AccountAuthenticator.
+        // See https://android.googlesource.com/platform/frameworks/base/+/b61e8fba
+        minSdkVersion 14
+        targetSdkVersion 21
+        versionCode 2
+        versionName "1.0"
+
+        buildConfigField "String", "CONSUMER_KEY", "\"${property(consumerKeyProperty)}\""
+        buildConfigField "String", "CONSUMER_SECRET", "\"${property(consumerSecretProperty)}\""
+        buildConfigField "String", "CALLBACK_URL", "\"${property(callbackUrlProperty)}\""
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(property(keystoreProperty))
+            storePassword "jeffpdavidson"
+            keyAlias "fantasywear"
+            keyPassword "fantasywear"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles = [
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "$rootDir/proguard-rules.pro"
+            ]
+            signingConfig = signingConfigs.release
+        }
+    }
+
+    packagingOptions {
+        // Provided by both hamcrest-core and junit.
+        exclude 'LICENSE.txt'
+    }
+
+    sourceSets.androidTest.manifest.srcFile 'src/androidTest/AndroidManifest.xml'
+
+    // TODO: Automatically generate these Java files.
+    sourceSets.main.java.srcDir 'src/main/java-proto'
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile project(':common')
+    wearApp project(':wear')
+
+    // For library dependencies, it is okay to pick up new bugfix releases.
+
+    //noinspection GradleDynamicVersion
+    compile 'com.google.android.gms:play-services-wearable:6.5.+'
+    //noinspection GradleDynamicVersion
+    compile 'com.squareup.wire:wire-runtime:1.6.+'
+    //noinspection GradleDynamicVersion
+    compile 'com.android.support:appcompat-v7:21.0.+'
+
+    //noinspection GradleDynamicVersion
+    androidTestCompile 'com.android.support.test:testing-support-lib:0.+'
+    //noinspection GradleDynamicVersion
+    androidTestCompile 'com.jayway.android.robotium:robotium-solo:5.2.+'
+    //noinspection GradleDynamicVersion
+    androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.+'
+}

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FantasyWear</string>
+    <string name="retry">Retry</string>
+    <string name="cancel">Cancel</string>
+    <string name="auth_error">Error authenticating with Yahoo.</string>
+    <string name="refresh">Refresh</string>
+    <string name="accounts">Accounts</string>
+    <string name="leagues">Leagues</string>
+    <string name="sync_interval">Sync interval</string>
+    <string name="add_account">Add account</string>
+    <string name="empty_text_no_account">Please add an account below to get started.</string>
+    <string name="empty_text_no_leagues">
+        No leagues are currently active on your accounts. If you just added an account, please wait
+        a moment while we fetch your leagues.
+    </string>
+    <string name="yahoo_id">Yahoo ID: %s</string>
+    <string name="leagues_list">Leagues: %s</string>
+    <string name="leagues_list_empty">No leagues</string>
+    <string name="account_details">Account details</string>
+    <string name="account_details_message">
+        This account is associated with the following leagues: %s
+    </string>
+    <string name="remove">Remove</string>
+    <string name="close">Close</string>
+    <string name="league_name_separator">,&#160;</string>
+    <string name="remove_account">Remove account</string>
+    <string name="remove_account_message">
+        Are you sure you want to remove this account? You will stop receiving notifications for all
+        teams owned by this account.
+    </string>
+    <string name="save">Save</string>
+    <plurals name="minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+</resources>

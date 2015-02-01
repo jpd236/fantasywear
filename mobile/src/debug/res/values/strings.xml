@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fantasywear_demo">FantasyWear Demo</string>
+    <string name="opp_name">Opponent Name:</string>
+    <string name="score">Score:</string>
+    <string name="opp_score">Opponent Score:</string>
+    <string name="logo_url">Logo URL:</string>
+    <string name="opp_logo_url">Opponent Logo URL:</string>
+    <string name="push">Push</string>
+</resources>
