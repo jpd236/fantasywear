@@ -10,7 +10,7 @@ android {
         applicationId "com.jeffpdavidson.fantasywear"
         minSdkVersion 20
         targetSdkVersion 21
-        versionCode 1
+        versionCode 3
         versionName "1.0"
     }
 
