@@ -1,5 +1,7 @@
 package com.jeffpdavidson.fantasywear.api.parser;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Xml;
 
 import com.android.volley.ParseError;
@@ -21,6 +23,7 @@ import java.io.Reader;
 public final class ScoreboardParser {
     private ScoreboardParser() {}
 
+    @NonNull
     public static Matchup parseXml(Reader reader) throws ParseError {
         XmlPullParser parser = Xml.newPullParser();
         try {
@@ -34,6 +37,7 @@ public final class ScoreboardParser {
         }
     }
 
+    @NonNull
     private static Matchup parseFantasyContent(XmlPullParser parser)
             throws XmlPullParserException, IOException {
         parser.next();
@@ -41,12 +45,16 @@ public final class ScoreboardParser {
         while (parser.next() != XmlPullParser.END_DOCUMENT) {
             if (parser.getEventType() == XmlPullParser.START_TAG &&
                     "matchup".equals(parser.getName())) {
-                return parseMatchup(parser);
+                Matchup matchup = parseMatchup(parser);
+                if (matchup != null) {
+                    return matchup;
+                }
             }
         }
         throw new XmlPullParserException("No <league> in <fantasy_content> tag");
     }
 
+    @Nullable
     private static Matchup parseMatchup(XmlPullParser parser)
             throws XmlPullParserException, IOException {
         parser.require(XmlPullParser.START_TAG, null, "matchup");
@@ -75,7 +83,7 @@ public final class ScoreboardParser {
                 }
             }
         }
-        // If the user's team wasn't found, we'll try the next matchup in parseMatchups.
+        // If the user's team wasn't found, we'll try the next matchup.
         return null;
     }
 

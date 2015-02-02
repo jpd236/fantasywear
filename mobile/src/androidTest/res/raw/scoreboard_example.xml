@@ -6,6 +6,32 @@
                 <matchup>
                     <teams count="2">
                         <team>
+                            <name>Person x</name>
+                            <team_logos>
+                                <team_logo>
+                                    <url>http://logo</url>
+                                </team_logo>
+                            </team_logos>
+                            <team_points>
+                                <total>50.00</total>
+                            </team_points>
+                        </team>
+                        <team>
+                            <name>Person y</name>
+                            <team_logos>
+                                <team_logo>
+                                    <url>http://logo</url>
+                                </team_logo>
+                            </team_logos>
+                            <team_points>
+                                <total>50.00</total>
+                            </team_points>
+                        </team>
+                    </teams>
+                </matchup>
+                <matchup>
+                    <teams count="2">
+                        <team>
                             <name>Opponent</name>
                             <team_logos>
                                 <team_logo>
