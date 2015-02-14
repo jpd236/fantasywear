@@ -58,6 +58,7 @@ public final class LeagueParser {
         parser.require(XmlPullParser.START_TAG, null, "league");
         League.Builder league = new League.Builder();
         boolean isSupported = false;
+        boolean isFinished = false;
         while (parser.next() != XmlPullParser.END_TAG && !"league".equals(parser.getName())) {
             if (parser.getEventType() == XmlPullParser.START_TAG) {
                 if ("league_key".equals(parser.getName())) {
@@ -68,13 +69,18 @@ public final class LeagueParser {
                     // Only return head-to-head leagues.
                     // TODO: Support other fantasy league formats (points, roto, others?).
                     isSupported = parser.nextText().contains("head");
+                } else if ("is_finished".equals(parser.getName())) {
+                    // Filter out leagues which have already finished.
+                    // These should mostly be filtered out by setting is_available=1 on the query,
+                    // but some recently-finished leagues may still show up here.
+                    isFinished = "1".equals(parser.nextText());
                 } else {
                     Util.skipCurrentTag(parser);
                 }
             }
         }
         parser.require(XmlPullParser.END_TAG, null, "league");
-        if (!isSupported) {
+        if (!isSupported || isFinished) {
             return null;
         }
         return league.build();

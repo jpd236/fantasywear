@@ -23,8 +23,8 @@ android {
         // See https://android.googlesource.com/platform/frameworks/base/+/b61e8fba
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 4
-        versionName "1.0"
+        versionCode fwVersionCode
+        versionName fwVersionName
 
         buildConfigField "String", "CONSUMER_KEY", "\"${property(consumerKeyProperty)}\""
         buildConfigField "String", "CONSUMER_SECRET", "\"${property(consumerSecretProperty)}\""

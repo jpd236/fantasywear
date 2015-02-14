@@ -15,6 +15,12 @@
                             <name>name2</name>
                             <scoring_type>unknown</scoring_type>
                         </league>
+                        <league>
+                            <league_key>key3</league_key>
+                            <name>name3</name>
+                            <scoring_type>headpoint</scoring_type>
+                            <is_finished>1</is_finished>
+                        </league>
                     </leagues>
                 </game>
             </games>

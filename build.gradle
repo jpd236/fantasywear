@@ -13,3 +13,7 @@ allprojects {
         jcenter()
     }
 }
+
+// Version code and name. Needs to be the same in both mobile and wear APKs.
+ext.fwVersionCode = 5
+ext.fwVersionName = "1.0.1"
