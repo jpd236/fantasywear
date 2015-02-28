@@ -1,6 +1,7 @@
 package com.jeffpdavidson.fantasywear.api.auth;
 
 import android.accounts.Account;
+import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.accounts.NetworkErrorException;
 import android.annotation.TargetApi;
@@ -28,6 +29,7 @@ public class AccountAuthenticatorTest {
 
     @Mock private Context mMockContext;
     @Mock private AccountManager mMockAccountManager;
+    @Mock private AccountAuthenticatorResponse mMockAuthenticatorResponse;
     private TestAccountAuthenticator mAuthenticator;
 
     @Before
@@ -46,8 +48,8 @@ public class AccountAuthenticatorTest {
         Mockito.doThrow(new SecurityException()).when(mMockContext)
                 .enforcePermission(Mockito.eq(permission.USE_FANTASY_WEAR_ACCOUNTS),
                         Mockito.eq(12345), Mockito.eq(54321), Mockito.anyString());
-        mAuthenticator.getAuthToken(
-                null, ACCOUNT, AccountAuthenticator.TOKEN_TYPE_OAUTH, options);
+        mAuthenticator.getAuthToken(mMockAuthenticatorResponse, ACCOUNT,
+                AccountAuthenticator.TOKEN_TYPE_OAUTH, options);
     }
 
 
@@ -55,10 +57,11 @@ public class AccountAuthenticatorTest {
     @Test
     public void getAuthTokenAfterClearingData() throws Exception {
         mAuthenticator.mToken = new Token.Builder().build();
-        Bundle result = mAuthenticator.getAuthToken(
-                null, ACCOUNT, AccountAuthenticator.TOKEN_TYPE_OAUTH, new Bundle());
-        Assert.assertEquals(AccountManager.ERROR_CODE_BAD_AUTHENTICATION,
-                result.getInt(AccountManager.KEY_ERROR_CODE));
+        mAuthenticator.getAuthToken(mMockAuthenticatorResponse, ACCOUNT,
+                AccountAuthenticator.TOKEN_TYPE_OAUTH, new Bundle());
+        Mockito.verify(mMockAuthenticatorResponse).onError(
+                Mockito.eq(AccountManager.ERROR_CODE_BAD_AUTHENTICATION), Mockito.anyString());
+        Assert.assertTrue(mAuthenticator.mNotifyCalled);
         Mockito.verify(mMockAccountManager).removeAccount(ACCOUNT, null, null);
     }
 
@@ -68,10 +71,11 @@ public class AccountAuthenticatorTest {
         mAuthenticator.mToken = new Token.Builder()
                 .authorization_expiration_time_sec((System.currentTimeMillis() / 1000) - 1)
                 .build();
-        Bundle result = mAuthenticator.getAuthToken(
-                null, ACCOUNT, AccountAuthenticator.TOKEN_TYPE_OAUTH, new Bundle());
-        Assert.assertEquals(AccountManager.ERROR_CODE_BAD_AUTHENTICATION,
-                result.getInt(AccountManager.KEY_ERROR_CODE));
+        mAuthenticator.getAuthToken(mMockAuthenticatorResponse, ACCOUNT,
+                AccountAuthenticator.TOKEN_TYPE_OAUTH, new Bundle());
+        Mockito.verify(mMockAuthenticatorResponse).onError(
+                Mockito.eq(AccountManager.ERROR_CODE_BAD_AUTHENTICATION), Mockito.anyString());
+        Assert.assertTrue(mAuthenticator.mNotifyCalled);
         Mockito.verify(mMockAccountManager).removeAccount(ACCOUNT, null, null);
     }
 
@@ -90,6 +94,7 @@ public class AccountAuthenticatorTest {
                 result.getString(AccountManager.KEY_AUTHTOKEN));
         Assert.assertFalse(mAuthenticator.mRefreshCalled);
         Assert.assertFalse(mAuthenticator.mUpdateCalled);
+        Assert.assertFalse(mAuthenticator.mNotifyCalled);
     }
 
     @Test
@@ -110,6 +115,7 @@ public class AccountAuthenticatorTest {
                 result.getString(AccountManager.KEY_AUTHTOKEN));
         Assert.assertTrue(mAuthenticator.mRefreshCalled);
         Assert.assertTrue(mAuthenticator.mUpdateCalled);
+        Assert.assertFalse(mAuthenticator.mNotifyCalled);
     }
 
     @Test(expected = NetworkErrorException.class)
@@ -133,10 +139,11 @@ public class AccountAuthenticatorTest {
                 .expiration_time_sec(currentTimeSec - 1)
                 .build();
         mAuthenticator.mRefreshError = new VolleyError(new NetworkResponse(401, null, null, false));
-        Bundle result = mAuthenticator.getAuthToken(
-                null, ACCOUNT, AccountAuthenticator.TOKEN_TYPE_OAUTH, new Bundle());
-        Assert.assertEquals(AccountManager.ERROR_CODE_BAD_AUTHENTICATION,
-                result.getInt(AccountManager.KEY_ERROR_CODE));
+        mAuthenticator.getAuthToken(mMockAuthenticatorResponse, ACCOUNT,
+                AccountAuthenticator.TOKEN_TYPE_OAUTH, new Bundle());
+        Mockito.verify(mMockAuthenticatorResponse).onError(
+                Mockito.eq(AccountManager.ERROR_CODE_BAD_AUTHENTICATION), Mockito.anyString());
+        Assert.assertTrue(mAuthenticator.mNotifyCalled);
         Mockito.verify(mMockAccountManager).removeAccount(ACCOUNT, null, null);
     }
 
@@ -146,6 +153,7 @@ public class AccountAuthenticatorTest {
         VolleyError mRefreshError;
         boolean mRefreshCalled;
         boolean mUpdateCalled;
+        boolean mNotifyCalled;
 
         TestAccountAuthenticator(Context context) {
             super(context);
@@ -168,6 +176,11 @@ public class AccountAuthenticatorTest {
         @Override
         protected void updateToken(Account account, Token token) {
             mUpdateCalled = true;
+        }
+
+        @Override
+        protected void notifyOnLostAuthorization() {
+            mNotifyCalled = true;
         }
     }
 }

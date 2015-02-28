@@ -6,11 +6,16 @@ import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.accounts.NetworkErrorException;
 import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 
 import com.android.volley.VolleyError;
 import com.jeffpdavidson.fantasywear.Manifest.permission;
@@ -37,6 +42,9 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     public static final String ACCOUNT_TYPE_YAHOO =
             "com.jeffpdavidson.fantasywear.ACCOUNT_TYPE_YAHOO";
     public static final String TOKEN_TYPE_OAUTH = "oauth";
+
+    private static final int REQUEST_AUTH_ERROR = 1;
+    private static final int NOTIFICATION_AUTH_ERROR = 1;
 
     /** Service exposing {@link AccountAuthenticator}'s Binder interface. */
     public static class AccountAuthenticatorService extends Service {
@@ -96,7 +104,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
             // automatically refresh old tokens. Either way, this is an unrecoverable state of
             // the account, so remove it and return an error.
             FWLog.e("Token authorization lost; removing account");
-            return handleLostAuthorization(account);
+            handleLostAuthorization(response, account);
+            return null;
         } else if (token.expiration_time_sec == null ||
                 currentTimeSec > token.expiration_time_sec) {
             FWLog.v("Refreshing expired or invalidated auth token");
@@ -107,12 +116,15 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                     throw new NetworkErrorException("Server or network error refreshing token", e);
                 } else {
                     // Server indicated we aren't able to refresh tokens. Invalidate account.
-                    return handleLostAuthorization(account);
+                    FWLog.e(e, "Client error while refreshing token, invalidating account");
+                    handleLostAuthorization(response, account);
+                    return null;
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                return makeErrorBundle(AccountManager.ERROR_CODE_CANCELED,
+                response.onError(AccountManager.ERROR_CODE_CANCELED,
                         "Interrupted while refreshing token");
+                return null;
             }
 
             // Refresh succeeded - save data for future use.
@@ -145,23 +157,49 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
     }
 
     @SuppressLint("InlinedApi")
-    private Bundle handleLostAuthorization(Account account) {
+    private void handleLostAuthorization(AccountAuthenticatorResponse response, Account account) {
         mAccountManager.removeAccount(account, null, null);
+
+        // Show a notification so the user knows to log in again.
+        // We should be checking whether AccountManager#KEY_NOTIFY_ON_FAILURE is true, but that is a
+        // hidden API.
+        notifyOnLostAuthorization();
+
         // This error code was added in API 18, but it is inlined at compile time and it does not
         // matter if we return it on earlier API versions.
-        return makeErrorBundle(AccountManager.ERROR_CODE_BAD_AUTHENTICATION, "Lost authorization");
-    }
-
-    private static Bundle makeErrorBundle(int errorCode, String errorMsg) {
-        Bundle result = new Bundle();
-        result.putInt(AccountManager.KEY_ERROR_CODE, errorCode);
-        result.putString(AccountManager.KEY_ERROR_MESSAGE, errorMsg);
-        return result;
+        response.onError(AccountManager.ERROR_CODE_BAD_AUTHENTICATION, "Lost authorization");
     }
 
     @Override
     public String getAuthTokenLabel(String authTokenType) {
         return mContext.getString(R.string.app_name);
+    }
+
+    @SuppressLint("InlinedApi")
+    @VisibleForTesting
+    protected void notifyOnLostAuthorization() {
+        PackageManager pm = mContext.getPackageManager();
+        Intent intent = pm.getLaunchIntentForPackage(mContext.getPackageName());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        String details = mContext.getString(R.string.auth_error_details);
+        Notification notification = new NotificationCompat.Builder(mContext)
+                .setSmallIcon(android.R.drawable.stat_sys_warning)
+                .setContentTitle(mContext.getString(R.string.auth_error_title))
+                .setContentText(details)
+                .setContentIntent(PendingIntent.getActivity(mContext, REQUEST_AUTH_ERROR, intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT))
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(details))
+                .setColor(mContext.getResources().getColor(R.color.accent))
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setCategory(Notification.CATEGORY_ERROR)
+                .setPriority(Notification.PRIORITY_HIGH)
+                .setOnlyAlertOnce(true)
+                .setAutoCancel(true)
+                .build();
+
+        NotificationManagerCompat nm = NotificationManagerCompat.from(mContext);
+        // Just use a constant ID so we only show one notification total.
+        nm.notify(NOTIFICATION_AUTH_ERROR, notification);
     }
 
     @VisibleForTesting

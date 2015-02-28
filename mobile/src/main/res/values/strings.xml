@@ -34,4 +34,8 @@
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>
     </plurals>
+    <string name="auth_error_title">Authentication error</string>
+    <string name="auth_error_details">
+        FantasyWear is no longer able to access your account. Please log in again.
+    </string>
 </resources>

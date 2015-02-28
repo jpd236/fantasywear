@@ -45,8 +45,10 @@ public abstract class OAuthApiRequest<T> extends OAuthRequest<T> {
     protected Token getToken() throws AuthFailureError {
         String tokenStr;
         try {
+            // NOTE: We pass true for notifyAuthFailure for clarity, but our authenticator always
+            // assumes it is true, because AccountManager#KEY_NOTIFY_ON_FAILURE is a hidden API.
             tokenStr = mAccountManager.blockingGetAuthToken(
-                    mAccount, AccountAuthenticator.TOKEN_TYPE_OAUTH, false /* notifyAuthFailure */);
+                    mAccount, AccountAuthenticator.TOKEN_TYPE_OAUTH, true /* notifyAuthFailure */);
         } catch (AuthenticatorException | OperationCanceledException | IOException e) {
             throw new AuthFailureError("Unable to obtain auth token", e);
         }
