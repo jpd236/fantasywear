@@ -15,5 +15,5 @@ allprojects {
 }
 
 // Version code and name. Needs to be the same in both mobile and wear APKs.
-ext.fwVersionCode = 5
-ext.fwVersionName = "1.0.1"
+ext.fwVersionCode = 6
+ext.fwVersionName = "1.0.2"
