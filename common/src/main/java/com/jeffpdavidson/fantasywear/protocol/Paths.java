@@ -1,6 +1,11 @@
 package com.jeffpdavidson.fantasywear.protocol;
 
-/** Constants defining path prefixes for communication to/from the wear device. */
+/**
+ * Constants defining path prefixes for communication to/from the wear device.
+ *
+ * Must be kept in sync with the IntentFilters for the mobile and wear WearableListenerService
+ * implementations.
+ */
 public final class Paths {
     private Paths() {}
 
