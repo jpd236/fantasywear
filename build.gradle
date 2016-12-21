@@ -4,7 +4,7 @@ buildscript {
     }
     dependencies {
         //noinspection GradleDynamicVersion
-        classpath 'com.android.tools.build:gradle:1.1.+'
+        classpath 'com.android.tools.build:gradle:2.2.3'
     }
 }
 
@@ -15,5 +15,5 @@ allprojects {
 }
 
 // Version code and name. Needs to be the same in both mobile and wear APKs.
-ext.fwVersionCode = 6
-ext.fwVersionName = "1.0.2"
+ext.fwVersionCode = 7
+ext.fwVersionName = "1.0.7"

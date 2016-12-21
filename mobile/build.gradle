@@ -14,15 +14,15 @@ if (!hasProperty(consumerKeyProperty) || !hasProperty(consumerSecretProperty) ||
 }
 
 android {
-    compileSdkVersion 21
+    compileSdkVersion 25
     buildToolsVersion "21.1.2"
 
     defaultConfig {
         applicationId "com.jeffpdavidson.fantasywear"
-        // Prior to API 14, we are unable to reliably check the caller in AccountAuthenticator.
-        // See https://android.googlesource.com/platform/frameworks/base/+/b61e8fba
-        minSdkVersion 14
-        targetSdkVersion 21
+        // Prior to API 23, we cannot access AccountManager for our own accounts without the
+        // GET_ACCOUNTS permission.
+        minSdkVersion 23
+        targetSdkVersion 25
         versionCode fwVersionCode
         versionName fwVersionName
 
@@ -72,7 +72,7 @@ dependencies {
     // For library dependencies, it is okay to pick up new bugfix releases.
 
     //noinspection GradleDynamicVersion
-    compile 'com.google.android.gms:play-services-wearable:6.5.+'
+    compile 'com.google.android.gms:play-services-wearable:10.0.+'
     //noinspection GradleDynamicVersion
     compile 'com.squareup.wire:wire-runtime:1.6.+'
     //noinspection GradleDynamicVersion
