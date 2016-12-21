@@ -31,7 +31,7 @@
         <service android:name=".services.ListenerService"
                  tools:ignore="ExportedService">
             <intent-filter>
-                <action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
+                <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
             </intent-filter>
         </service>
 
